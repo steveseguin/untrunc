@@ -96,8 +96,11 @@ size_t FileRead::fillBuffer(off_t location) {
 }
 
 size_t FileRead::readBuffer(uchar* dest, size_t size, size_t n) {
+	if (size == 0 || n == 0 || atEnd()) return 0;
 	logg(VV, "requests: ", size*n, " at offset : ", buf_off_, '\n');
-	size_t total = size*n;
+	// The final buffer may be only partially filled. Never report or copy
+	// bytes beyond the file's end as successfully read data.
+	size_t total = min<uint64_t>(size*n, size_ - pos());
 	size_t avail = buf_size_ - buf_off_;
 	size_t nread = 0;
 	if (avail < total) {
