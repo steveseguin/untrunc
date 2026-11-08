@@ -93,7 +93,7 @@ bool MutualPattern::doesMatchApprox(const uchar* buf) {
 
 bool MutualPattern::hasPattern(int off, const ByteArr& buf) {
 	for (uint i=0; i < buf.size(); i++) {
-		if (!is_mutual_[i]) return false;
+		if (!is_mutual_[off+i]) return false;
 		if (data_[off+i] != buf[i]) return false;
 	}
 	return true;
